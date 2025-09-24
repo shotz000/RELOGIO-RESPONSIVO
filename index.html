@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8">
+  <title>Relógio Responsivo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      transition: background-image 1s ease-in-out;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 90%;
+      width: 600px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #hora {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    #mensagem {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    #frase {
+      font-size: 1.3rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+      #hora {
+        font-size: 3rem;
+      }
+
+      #mensagem {
+        font-size: 1.7rem;
+      }
+
+      #frase {
+        font-size: 1.1rem;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="hora"></div>
+    <div id="mensagem"></div>
+    <div id="frase"></div>
+  </div>
+
+  <script>
+    function atualizarHora() {
+      const agora = new Date();
+      let horas = agora.getHours();
+      let minutos = agora.getMinutes();
+      let segundos = agora.getSeconds();
+
+      horas = horas < 10 ? '0' + horas : horas;
+      minutos = minutos < 10 ? '0' + minutos : minutos;
+      segundos = segundos < 10 ? '0' + segundos : segundos;
+
+      const horaAtual = `${horas}:${minutos}:${segundos}`;
+      document.getElementById('hora').textContent = horaAtual;
+
+      let mensagem = '';
+      let imagemSRC = ''; 
+      let frases = '';
+
+      if (horas >= 5 && horas < 12) {
+        mensagem = 'Bom dia!'; 
+        imagemSRC = 'IMG/MANHA.jpg';
+        frases = 'Acorde com gratidão e coragem. Hoje é um novo dia para vencer!';
+      } else if (horas >= 12 && horas < 18) {
+        mensagem = 'Boa tarde!';
+        imagemSRC = 'IMG/TARDE.jpg'; 
+        frases = 'Ainda há tempo para conquistar o que deseja. Mantenha o foco!';
+      } else if (horas >= 18 && horas < 24) {
+        mensagem = 'Boa noite!';
+        imagemSRC = 'IMG/NOITE.jpg';
+        frases = 'Descanse com a certeza de que você deu o seu melhor hoje.';
+      } else {
+        mensagem = 'Boa madrugada!';
+        imagemSRC = 'IMG/MADRUGA.jpg';
+        frases = 'Mesmo nas horas mais silenciosas, seus sonhos continuam vivos.';
+      }
+
+      document.getElementById('mensagem').textContent = mensagem;
+      document.getElementById('frase').textContent = frases;
+      document.body.style.backgroundImage = `url('${imagemSRC}')`;
+    }
+
+    setInterval(atualizarHora, 1000);
+    atualizarHora();
+  </script>
+</body>
+</html>
+
+<script>
+  if ("serviceworker" in navigator) {
+    navigator.serviceworker.register("serviceworker.js")
+    .then (() => console.log("Service Worker Registrado"))
+    .catch(err => console.log("Erro no SW:", err));
+  }
+</script>
